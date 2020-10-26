@@ -1,0 +1,24 @@
+---
+- hosts: all
+  become: true
+  gather_facts: true
+
+  roles:
+    - role: ./common
+    - role: ./ssm-agent
+      vars:
+        ssm_activation_code:
+        ssm_activation_id:
+    - role: ./transparent_proxy
+      vars:
+        subscription_url:
+        aws_region: ap-northeast-1
+
+  handlers:
+    - name: Restart services
+      service:
+        name: "{{item}}"
+        state: restart
+      loop:
+        - amazon_cloudwatch_agent
+        - amazon_ssm_agent

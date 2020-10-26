@@ -1,0 +1,19 @@
+---
+- name: Make aws credential directory accessable for CWAgent
+  become: true
+  file:
+    path: "{{item}}"
+    mode: +rx
+    state: directory
+  loop:
+    - "/root"
+    - "/root/.aws"
+
+- name: Make credential file accessable
+  become: true
+  file:
+    path: /root/.aws/credentials
+    mode: +r
+- name: apply region to credentials
+  command:
+    cmd: echo region = {{aws_region}} >> /root/.aws/credentials

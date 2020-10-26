@@ -1,0 +1,87 @@
+---
+dependencies:
+  - role: jellycsc.v2ray
+  - role: christiangda.amazon_cloudwatch_agent
+    vars:
+      cwa_agent_mode: onPremise
+      cwa_aws_region: "{{aws_region}}"
+      cwa_profile: "default"
+      cwa_agent_profile_path: /root
+      cwa_conf_json_file_content:
+        agent:
+          metrics_collection_interval: 60
+          region: "{{aws_region}}"
+        metrics:
+          metrics_collected:
+            cpu:
+              measurement:
+                - time_active
+                - time_guest
+                - time_guest_nice
+                - time_idle
+                - time_iowait
+                - time_irq
+                - time_nice
+                - time_softirq
+                - time_steal
+                - time_system
+                - time_user
+                - usage_active
+                - usage_guest
+                - usage_guest_nice
+                - usage_idle
+                - usage_iowait
+                - usage_irq
+                - usage_nice
+                - usage_softirq
+                - usage_steal
+                - usage_system
+                - usage_user
+              metrics_collection_interval: 10
+            disk:
+              resources:
+                - "/"
+              measurement:
+                - free
+                - total
+                - used
+                - used_percent
+              drop_device: true
+            mem:
+              measurement:
+                - available
+                - available_percent
+                - free
+                - total
+                - used
+                - used_percent
+            net:
+              measurement:
+                - bytes_sent
+                - bytes_recv
+                - drop_in
+                - drop_out
+                - err_in
+                - err_out
+                - packets_sent
+                - packets_recv
+            netstat:
+              measurement:
+                - tcp_established
+                - tcp_syn_sent
+                - tcp_close
+              metrics_collection_interval: 60
+            processes:
+              measurement:
+                - running
+                - sleeping
+                - dead
+        logs:
+          logs_collected:
+            files:
+              collect_list:
+                - file_path: "/opt/aws/amazon-cloudwatch-agent/logs/amazon-cloudwatch-agent.log"
+                  log_group_name: micro-dev
+                  log_stream_name: amazon-cloudwatch-agent.log
+                  timezone: UTC
+          force_flush_interval: 15

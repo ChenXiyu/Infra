@@ -1,0 +1,23 @@
+---
+# set up subscription refresh mechanism
+- name: Copy subscription refreshment script
+  copy:
+    src: ../files/refresh_subscriptions.sh
+    dest: /root/refresh_subscriptions.sh
+    owner: root
+    group: root
+    mode: 755
+
+- name: Set cron
+  command:
+    cmd: echo '0 5 * * * /root/refresh_subscriptions.sh {{subscription_url}}' >> /etc/crontab # Everyday 5:00 refresh subscription.
+
+- name: Start v2ray
+  script: ../files/refresh_subscriptions.sh {{subscription_url}}
+
+- name: Routing strategy
+  script: ../files/iptables_provision.sh
+
+- name: Enable ip forwarding
+  command:
+    cmd: echo net.ipv4.ip_forward=1 >> /etc/sysctl.conf && sysctl -p

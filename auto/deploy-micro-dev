@@ -1,0 +1,5 @@
+#!/bin/bash -e
+
+cd $(dirname $0)/..
+
+auto/dev-env ansible-playbook -i playbooks/hosts playbooks/transparent_proxy.yml
