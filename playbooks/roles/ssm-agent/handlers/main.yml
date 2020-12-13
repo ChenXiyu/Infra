@@ -1,5 +1,5 @@
 ---
-  - name: Activate ssm-agent
-    become: ture
-    command:
-      cmd: amazon-ssm-agent -register -code "{{ssm_activation_code}}" -id "{{ssm_activation_id}}" -region "{{aws_region}}"
+  - name: Restart services
+    service:
+      name: amazon_ssm_agent
+      state: restart

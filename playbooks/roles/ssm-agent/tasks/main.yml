@@ -9,11 +9,23 @@
     - "/root"
     - "/root/.aws"
 
+- name: Activate ssm-agent
+  become: ture
+  command:
+    cmd: sudo /snap/amazon-ssm-agent/current/amazon-ssm-agent -register -code "{{ssm_activation_code}}" -id "{{ssm_activation_id}}" -region "{{aws_region}}"
+
+- name: restart ssm-agent
+  service:
+    name: snap.amazon_ssm_agent.amazon_ssm_agent
+    state: restarted
+
 - name: Make credential file accessable
   become: true
   file:
     path: /root/.aws/credentials
     mode: +r
+
 - name: apply region to credentials
-  command:
-    cmd: echo region = {{aws_region}} >> /root/.aws/credentials
+  lineinfile:
+    path: /root/.aws/credentials
+    line: region = {{aws_region}}
