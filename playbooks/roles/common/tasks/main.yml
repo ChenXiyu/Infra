@@ -1,5 +1,5 @@
 ---
-- name: Package Installation
+- name: Package Installation(redhat)
   yum:
     name: "{{item}}"
     state: present
@@ -8,3 +8,13 @@
     - epel-release
     - htop
   when: ansible_facts['os_family']|lower == 'redhat'
+
+- name: Package Installation(ubuntu)
+  apt:
+    name: "{{item}}"
+    state: present
+    update_cache: yes
+  loop:
+    - iptables-persistent
+    - htop
+  when: ansible_facts['os_family']|lower == 'debian'
