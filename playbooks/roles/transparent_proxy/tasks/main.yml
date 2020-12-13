@@ -8,9 +8,10 @@
     group: root
     mode: 755
 
-- name: Set cron
-  command:
-    cmd: echo '0 5 * * * /root/refresh_subscriptions.sh {{subscription_url}}' >> /etc/crontab # Everyday 5:00 refresh subscription.
+- name: enable v2ray
+  service:
+    name: v2ray
+    enabled: yes
 
 - name: Start v2ray
   script: ../files/refresh_subscriptions.sh {{subscription_url}}
@@ -18,6 +19,18 @@
 - name: Routing strategy
   script: ../files/iptables_provision.sh
 
-- name: Enable ip forwarding
+- name: Enable ip forwarding(1)
+  lineinfile:
+    path: /etc/sysctl.conf
+    line: net.ipv4.ip_forward=1
+
+- name: Enable ip forwarding(2)
   command:
-    cmd: echo net.ipv4.ip_forward=1 >> /etc/sysctl.conf && sysctl -p
+    cmd: sysctl -p
+
+- name: Ensure the subscription updated everyday
+  cron:
+    name: "update subscriptions"
+    minute: "0"
+    hour: "5"
+    job: "/root/refresh_subscriptions.sh {{subscription_url}} >> /var/log/refresh_subscriptions.log"

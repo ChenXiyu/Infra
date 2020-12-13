@@ -20,7 +20,7 @@ iptables -t mangle -A PREROUTING -j V2RAY
 iptables -t mangle -N V2RAY_MASK
 iptables -t mangle -A V2RAY_MASK -d 127.0.0.1/32 -j RETURN
 iptables -t mangle -A V2RAY_MASK -d 224.0.0.0/4 -j RETURN
-iptables -t mangle -A V2RAY_MASK -p tcp --dport 2222 -j RETURN
+# iptables -t mangle -A V2RAY_MASK -p tcp --dport 2222 -j RETURN
 iptables -t mangle -A V2RAY_MASK -d 255.255.255.255/32 -j RETURN
 iptables -t mangle -A V2RAY_MASK -d ${ip_range} -j RETURN
 iptables -t mangle -A V2RAY_MASK -p icmp -j RETURN

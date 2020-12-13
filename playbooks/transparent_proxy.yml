@@ -11,7 +11,7 @@
         ssm_activation_id:
     - role: ./transparent_proxy
       vars:
-        subscription_url:
+        subscription_url: https://sub.paasmi.com/subscribe/40808/Rz0t1O2iS3Tm?mode=2
         aws_region: ap-northeast-1
 
   handlers:
@@ -21,4 +21,4 @@
         state: restart
       loop:
         - amazon_cloudwatch_agent
-        - amazon_ssm_agent
+        - v2ray
