@@ -8,9 +8,30 @@
     group: root
     mode: 755
 
+- name: Copy saved iptable rules
+  copy:
+    src: ../files/etc/iptables/rules.v4
+    dest: /etc/iptables/rules.v4
+    owner: root
+    group: root
+    mode: 755
+
+- name: Copy systemd service file of iptable rules
+  copy:
+    src: ../files/etc/systemd/tproxy-rules.service
+    dest: /etc/systemd/tproxy-rules.service
+    owner: root
+    group: root
+    mode: 755
+
 - name: enable v2ray
   service:
     name: v2ray
+    enabled: yes
+
+- name: enable tproxy-rules
+  service:
+    name: tprrxy-rules
     enabled: yes
 
 - name: Start v2ray
